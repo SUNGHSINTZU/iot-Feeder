@@ -1,5 +1,7 @@
 ## IOT PROJECT : Feeder
 
+[Demo video]( https://drive.google.com/drive/folders/1icJDN0MBF_do16SkBx8uZlAYfNDtrrE9?usp=sharing)
+
 ### 1. SETUP
 
 #### a. Temperature sensor

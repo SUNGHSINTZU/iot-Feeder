@@ -2,7 +2,6 @@ import cv2
 import os
 import datetime,time
 import math
-import serial
 
 #%% define function
 def savepic(frame):
@@ -19,10 +18,15 @@ def pellet_area_ratio(image_path):
     image = cv2.imread(image_path)
     # change the (y1,x1) and (y2,x2)
     (h, w) = image.shape[:2]
-    x1 = math.ceil(w*0.3)
-    y1 = math.ceil(h*0.2)
+    x1 = math.ceil(w*0.1)
+    y1 = math.ceil(h*0.5)
     x2 = math.ceil(w*0.7)
-    y2 = math.ceil(h*0.8)
+    y2 = math.ceil(h*0.9)
+    
+#     x1 = math.ceil(w*0)
+#     y1 = math.ceil(h*0)
+#     x2 = math.ceil(w*1)
+#     y2 = math.ceil(h*1)
     mask = image[y1:y2, x1:x2]
     clone = image.copy()
     clone[y1:y2, x1:x2] = (255,153,51)
@@ -43,10 +47,13 @@ def pellet_area_ratio(image_path):
 
     mask_pixels = cv2.countNonZero(thresh)
     mask_area = (x2-x1) * (y2-y1)
+    print(h*w)
+    print(mask_pixels)
+    print(mask_area)
     area_ratio = (mask_pixels / mask_area) * 100
     area_ratio = "%.2f" % area_ratio
+    area_ratio = "A-" + area_ratio
     print(area_ratio)
-
 
     # show image
     if camera_mode == "h":
@@ -58,20 +65,15 @@ def pellet_area_ratio(image_path):
 
     return area_ratio
 
-def write_read(x):
-    arduino.write(bytes(x, 'utf-8'))
-    time.sleep(0.05)
-    data = arduino.readline()
-    return data
 
 #%% main code
 # 選擇攝影機
-cap = cv2.VideoCapture("http://192.168.0.111:81/stream")
+# cap = cv2.VideoCapture("http://192.168.0.111:81/stream")
+cap = cv2.VideoCapture("http://192.168.50.110:81/stream")
 CAMERA_NAME = 'CAM0'
 PIC_PERIOD = 5.0
-path = 'C:\Gloria\College Study\\110-1\Introduction to the Internet of Things\project\\rawpic'
-# 選擇 arduino COM
-arduino = serial.Serial(port='COM5', baudrate=115200, timeout=.1)
+# path = 'C:\Gloria\College Study\\110-1\Introduction to the Internet of Things\project\\rawpic'
+path='/home/pi/Desktop/iot-project/rawpic'
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
